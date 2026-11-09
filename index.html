@@ -1,0 +1,257 @@
+<!doctype html>
+<html lang="sk">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Timo Hero</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@600;700;800&family=Raleway:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  /* ===== Timo hero, drop-in section =====
+     Tokens: Vox / Timo brand. Magenta is the spark, ink dominates.
+     Bridge colours are sampled from the photo: navy blazer, lobby lamp gold. */
+  :root{
+    --ink:#131016;
+    --ink-2:#1a1520;
+    --paper:#f4eff8;
+    --muted:#b9b0c4;
+    --magenta:#ff00ff;
+    --magenta-soft:#ff7af5;
+    --violet:#8a2be2;
+    --navy:#1c1d3f;   /* blazer */
+    --lamp:#d9a54c;   /* lobby lamps, bell */
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:var(--ink);color:var(--paper);font-family:Raleway,system-ui,sans-serif}
+
+  .timo-hero{
+    position:relative; isolation:isolate; overflow:hidden;
+    min-height:clamp(560px, 82vh, 760px);
+    display:flex; align-items:center;
+    background:
+      /* magenta bloom behind the cape */
+      radial-gradient(42% 60% at 74% 58%, rgba(255,0,255,.30), transparent 70%),
+      /* violet haze that carries the glow toward the copy */
+      radial-gradient(55% 70% at 52% 40%, rgba(138,43,226,.22), transparent 70%),
+      /* navy from the blazer, grounding the lower half */
+      radial-gradient(70% 60% at 60% 110%, rgba(28,29,63,.95), transparent 70%),
+      /* warm lamp light bleeding out of the lobby */
+      radial-gradient(22% 30% at 50% 62%, rgba(217,165,76,.16), transparent 70%),
+      var(--ink);
+  }
+
+  /* --- the photo, no frame: masked on every edge into the ground --- */
+  .timo-hero__media{
+    position:absolute; z-index:-1;
+    top:0; bottom:0; right:0; width:min(62%, 900px);
+  }
+  .timo-hero__media img{
+    width:100%; height:100%; object-fit:cover; object-position:58% 30%;
+    display:block;
+    filter:saturate(1.08) contrast(1.04);
+  }
+  .timo-hero__media{
+    -webkit-mask-image:
+      linear-gradient(to right, transparent 0%, #000 42%),
+      linear-gradient(to top,   transparent 0%, #000 22%),
+      linear-gradient(to bottom,transparent 0%, #000 14%),
+      linear-gradient(to left,  transparent 0%, #000 10%);
+    -webkit-mask-composite: source-in;
+            mask-image:
+      linear-gradient(to right, transparent 0%, #000 42%),
+      linear-gradient(to top,   transparent 0%, #000 22%),
+      linear-gradient(to bottom,transparent 0%, #000 14%),
+      linear-gradient(to left,  transparent 0%, #000 10%);
+            mask-composite: intersect;
+  }
+  /* colour grade so the photo sits inside the brand light */
+  .timo-hero__media::after{
+    content:""; position:absolute; inset:0; pointer-events:none;
+    background:
+      radial-gradient(50% 55% at 70% 60%, rgba(255,0,255,.14), transparent 70%),
+      linear-gradient(180deg, rgba(19,16,22,.25), transparent 30%, transparent 70%, rgba(19,16,22,.6));
+    mix-blend-mode:screen;
+  }
+
+  /* --- light ribbons: the cape mesh flowing out across the section --- */
+  .timo-hero__ribbons{
+    position:absolute; inset:0; z-index:-1; width:100%; height:100%;
+    pointer-events:none; opacity:.55;
+  }
+  .timo-hero__ribbons path{
+    fill:none; stroke-linecap:round;
+    stroke-dasharray:6 14; animation:flow 18s linear infinite;
+  }
+  .timo-hero__ribbons path:nth-child(2){animation-duration:24s}
+  .timo-hero__ribbons path:nth-child(3){animation-duration:30s; animation-direction:reverse}
+  @keyframes flow{to{stroke-dashoffset:-400}}
+
+  /* fine grain so gradients do not band */
+  .timo-hero::before{
+    content:""; position:absolute; inset:0; z-index:-1; pointer-events:none; opacity:.06;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+
+  /* --- copy --- */
+  .timo-hero__inner{
+    width:100%; max-width:1240px; margin:0 auto; padding:96px 32px;
+  }
+  .timo-hero__copy{max-width:600px}
+
+  .timo-hero__eyebrow{
+    display:inline-flex; align-items:center; gap:10px;
+    padding:8px 14px 8px 12px; border-radius:999px;
+    font:600 13px/1 Sora,sans-serif; letter-spacing:.02em; color:var(--paper);
+    background:rgba(255,0,255,.08);
+    border:1px solid rgba(255,0,255,.35);
+    box-shadow:0 0 24px rgba(255,0,255,.18) inset;
+    margin-bottom:28px;
+  }
+  .timo-hero__dot{
+    width:8px; height:8px; border-radius:50%; background:var(--magenta);
+    box-shadow:0 0 0 0 rgba(255,0,255,.7); animation:pulse 2.2s infinite;
+  }
+  @keyframes pulse{70%{box-shadow:0 0 0 10px rgba(255,0,255,0)}100%{box-shadow:0 0 0 0 rgba(255,0,255,0)}}
+
+  .timo-hero h1{
+    font:800 clamp(44px, 6.2vw, 84px)/1.0 Sora,sans-serif;
+    letter-spacing:-.035em; color:var(--paper);
+    text-wrap:balance;
+  }
+  .timo-hero h1 .spark{
+    display:inline-block;
+    background:linear-gradient(100deg, var(--magenta) 0%, var(--magenta-soft) 45%, #ffd9a0 100%);
+    -webkit-background-clip:text; background-clip:text; color:transparent;
+    filter:drop-shadow(0 0 28px rgba(255,0,255,.45));
+    padding-bottom:.08em;
+  }
+
+  .timo-hero__lead{
+    margin-top:26px; max-width:520px;
+    font-size:clamp(17px, 1.45vw, 20px); line-height:1.6; color:var(--muted);
+  }
+  .timo-hero__lead strong{color:var(--paper); font-weight:600}
+
+  .timo-hero__ctas{display:flex; flex-wrap:wrap; gap:14px; margin-top:38px}
+  .btn{
+    display:inline-flex; align-items:center; gap:10px;
+    padding:16px 26px; border-radius:12px; text-decoration:none;
+    font:700 16px/1 Sora,sans-serif; letter-spacing:-.01em;
+    transition:transform .2s ease, box-shadow .2s ease, background .2s ease;
+  }
+  .btn--primary{
+    background:var(--magenta); color:var(--ink);
+    box-shadow:0 10px 40px -8px rgba(255,0,255,.7), 0 0 0 1px rgba(255,255,255,.15) inset;
+  }
+  .btn--primary:hover{transform:translateY(-2px); box-shadow:0 16px 50px -8px rgba(255,0,255,.9)}
+  .btn--ghost{
+    color:var(--paper); background:rgba(244,239,248,.06);
+    border:1px solid rgba(244,239,248,.18);
+    backdrop-filter:blur(10px); -webkit-backdrop-filter:blur(10px);
+  }
+  .btn--ghost:hover{background:rgba(244,239,248,.12); transform:translateY(-2px)}
+  .btn--ghost .play{
+    width:22px; height:22px; border-radius:50%; display:grid; place-items:center;
+    background:rgba(255,0,255,.2); border:1px solid rgba(255,0,255,.6);
+  }
+  .btn--ghost .play::before{
+    content:""; margin-left:2px;
+    border-left:7px solid var(--paper); border-top:5px solid transparent; border-bottom:5px solid transparent;
+  }
+
+  .timo-hero__channels{
+    display:flex; flex-wrap:wrap; gap:8px 22px; margin-top:44px;
+    font:600 13px/1 Sora,sans-serif; color:var(--muted); letter-spacing:.02em;
+  }
+  .timo-hero__channels span{display:inline-flex; align-items:center; gap:8px}
+  .timo-hero__channels span::before{
+    content:""; width:5px; height:5px; border-radius:50%; background:var(--magenta);
+    box-shadow:0 0 8px var(--magenta);
+  }
+
+  /* bottom edge melts into the next section */
+  .timo-hero__fade{
+    position:absolute; left:0; right:0; bottom:0; height:120px; z-index:-1;
+    background:linear-gradient(transparent, var(--ink));
+  }
+
+  /* ===== mobile: photo on top, copy rises out of it ===== */
+  @media (max-width: 860px){
+    .timo-hero{display:block; min-height:0}
+    .timo-hero__media{
+      position:relative; width:100%; height:62vh; max-height:520px;
+    }
+    .timo-hero__media img{object-position:55% 22%}
+    .timo-hero__media{
+      -webkit-mask-image:
+        linear-gradient(to bottom, transparent 0%, #000 10%, #000 50%, transparent 100%),
+        linear-gradient(to right, transparent 0%, #000 6%, #000 94%, transparent 100%);
+      -webkit-mask-composite: source-in;
+              mask-image:
+        linear-gradient(to bottom, transparent 0%, #000 10%, #000 50%, transparent 100%),
+        linear-gradient(to right, transparent 0%, #000 6%, #000 94%, transparent 100%);
+              mask-composite: intersect;
+    }
+    .timo-hero h1{font-size:clamp(34px, 10.4vw, 48px)}
+    .timo-hero__inner{padding:0 16px 64px; margin-top:-120px; position:relative}
+    .timo-hero__eyebrow{margin-bottom:20px}
+    .timo-hero__ctas .btn{flex:1 1 auto; justify-content:center}
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    .timo-hero__ribbons path, .timo-hero__dot{animation:none}
+  }
+</style>
+</head>
+<body>
+
+<section class="timo-hero" aria-labelledby="timo-hero-title">
+
+  <svg class="timo-hero__ribbons" viewBox="0 0 1440 760" preserveAspectRatio="none" aria-hidden="true">
+    <defs>
+      <linearGradient id="rib" x1="1" y1="0" x2="0" y2="0">
+        <stop offset="0"   stop-color="#ff00ff" stop-opacity=".9"/>
+        <stop offset=".55" stop-color="#ff7af5" stop-opacity=".35"/>
+        <stop offset="1"   stop-color="#8a2be2" stop-opacity="0"/>
+      </linearGradient>
+    </defs>
+    <path d="M1440 520 C 1180 470, 1000 610, 760 560 S 360 470, 0 590" stroke="url(#rib)" stroke-width="1.6"/>
+    <path d="M1440 600 C 1200 560, 1040 690, 800 640 S 380 560, 0 680" stroke="url(#rib)" stroke-width="1.1"/>
+    <path d="M1440 440 C 1220 400, 1060 520, 840 480 S 460 400, 0 500" stroke="url(#rib)" stroke-width=".8"/>
+  </svg>
+
+  <div class="timo-hero__media">
+    <!-- Replace with the original high-res image. The placeholder is cropped from a screenshot. -->
+    <img src="timo-receptionist-placeholder.jpg"
+         alt="Recepčná s holografickou maskou a plášťom, symbol Timo, AI recepcie pre hotely"
+         loading="eager" fetchpriority="high">
+  </div>
+
+  <div class="timo-hero__inner">
+    <div class="timo-hero__copy">
+      <span class="timo-hero__eyebrow"><span class="timo-hero__dot"></span>Timo, AI recepcia pre hotely</span>
+
+      <h1 id="timo-hero-title">Dajte svojej recepcii <span class="spark">superschopnosti</span></h1>
+
+      <p class="timo-hero__lead">
+        Timo zdvihne telefón, odpíše na správy a v správnej chvíli predá.
+        <strong>Všetky rozhovory s hosťami, aj telefonáty, máte na jednom mieste.</strong>
+      </p>
+
+      <div class="timo-hero__ctas">
+        <a class="btn btn--primary" href="#kontakt">Dohodnúť stretnutie</a>
+        <a class="btn btn--ghost" href="#demo"><span class="play"></span>Pozrite si Timo v akcii</a>
+      </div>
+
+      <div class="timo-hero__channels" aria-label="Kanály">
+        <span>Telefón</span><span>WhatsApp</span><span>E-mail</span><span>20+ jazykov</span><span>24/7</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="timo-hero__fade"></div>
+</section>
+
+</body>
+</html>
